@@ -23,7 +23,7 @@
 15. [Build System](#15-build-system)
 16. [CI and Release Pipeline](#16-ci-and-release-pipeline)
 17. [Testing](#17-testing)
-18. [Notable Architectural Decisions](#18-notable-architectural-decisions)
+18. [Other Notable Architectural Decisions](#18-notable-architectural-decisions)
 
 ---
 
@@ -152,7 +152,7 @@ Each worker has its own Webpack config and is bundled independently.
 
 ### libsession Worker Protocol
 
-The `libsession_util_nodejs` native addon is a NodeJS native addon. Every calls has to go through `libsession.worker.ts` using a typed message protocol:
+The `libsession_util_nodejs` native addon is a NodeJS native addon. Every call has to go through `libsession.worker.ts` using a typed message protocol:
 
 **Request:** `[jobId, configType, actionName, ...args]`
 
@@ -279,7 +279,7 @@ App ─▶ Guard Node ─▶ Middle Node ─▶ Exit Node ─▶ Destination
         (knows src)               (knows dst)
 ```
 
-The path building logic is making sure that the nodes of path are not in the same subnet.
+The path building logic is making sure that the nodes in the path are not in the same subnet.
 We also keep multiple paths in case one of them fails, or in case we need to store a message to a node that is already on our current path.
 
 ### Sending
@@ -311,7 +311,7 @@ For instance when we receive a message, we sometimes need to fetch a user's new 
 
 ### Open Groups (SOGS)
 
-Community rooms are served by **Session Open Group Servers (SOGS)**, accessed via the `ts/session/apis/open_group_api/` client. Communities usually use blinded Session IDs so joining a one does not expose your own SessionID . Blinded IDs start with `15` or `25`.
+Community rooms are served by **Session Open Group Servers (SOGS)**, accessed via the `ts/session/apis/open_group_api/` client. Communities usually use blinded Session IDs so joining one does not expose your own SessionID . Blinded IDs start with `15` or `25`.
 
 ### Libsession Config Layer
 
@@ -325,7 +325,7 @@ It is acceptable in its current call sites for a few reasons:
 
 1. **Seed node requests** - the certificate of those are pinned and embedded in the app (see `ts/session/apis/seed_node_api/SeedNodeAPI.ts`)
 2. **Guard node** - these are already encrypted at the onion routing layer.
-3. **Public external calls** (link previews, Giphy API) - these do not go through the onion logic and are on leaking metadata. They are disabled by default and can only be enabled after a warning about their use it approved.
+3. **Public external calls** (link previews, Giphy API) - these do not go through the onion logic and are leaking metadata. They are disabled by default and can only be enabled after a warning about their use is approved.
 
 The wrapper also serves as the **online-state detector**: if a request throws a network-unreachable error (`ENETUNREACH`, `EHOSTUNREACH`), it calls `setIsOnlineIfDifferent(false)` to flip the app's connectivity state. This is why virtually all outbound network requests funnel through it rather than calling `fetch` directly.
 
@@ -454,7 +454,7 @@ Due to the decentralised nature of Session, Disappearing messages work quite dif
 
 Each side of the conversation can have its own setting. So, if Alice and Bob are chatting, Alice can have **DaR** enabled and Bob can have **DaS** enabled, or one can have it **off** entirely, etc. A "Follow Setting" button is provided to allow the user to follow the other user's setting. Alice's message will expire based on her setting on Bob's devices, and Bob's messages will expire based on his setting on Alice's devices.
 
-DaR is also working quite differently from most other messaging apps. Each side will have different starts timer for the same message. So if Alice sends a message to Bob with DaR 1h, the message will be stored on Alice's swarm and devices for 1h (as it was sent by Alice).
+DaR is also working quite differently from most other messaging apps. Each side will have a different start time for the same message. So if Alice sends a message to Bob with DaR 1h, the message will be stored on Alice's swarm and devices for 1h (as it was sent by Alice).
 The same message on Bob's swarm will be stored for 14 days so that Bob can read it after 1h. Once Bob read the message, the message will be marked to be deleted in 1h on Bob's swarm and his devices.
 
 #### Disappearing messages on group conversations
