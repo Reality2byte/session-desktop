@@ -69,14 +69,18 @@ export const StyledScrollDescriptionContainer = styled.div`
   color: var(--text-secondary-color);
 `;
 
-const StyledCTAImage = styled.img`
+const StyledCTAImage = styled.img<{ $withSmallGradient?: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: right center;
   background-color: var(--primary-color);
 
-  mask-image: linear-gradient(to bottom, black 66%, transparent 97%);
+  ${props =>
+    props.$withSmallGradient
+      ? 'mask-image: linear-gradient(to bottom, black 90%, transparent 97%);'
+      : 'mask-image: linear-gradient(to bottom, black 66%, transparent 97%);'}
+
   mask-size: 100% 100%;
 `;
 
@@ -176,7 +180,7 @@ function getImage(variant: CTAVariant): ReactNode {
       return <StyledCTAImage src="images/cta/donate.webp" />;
 
     case CTAVariant.DONATE_APPEAL:
-      return <StyledCTAImage src="images/cta/donate-appeal.webp" />;
+      return <StyledCTAImage src="images/cta/donate-appeal.webp" $withSmallGradient={true} />;
 
     default:
       assertUnreachable(variant, 'getImage');
