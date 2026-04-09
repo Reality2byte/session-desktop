@@ -186,10 +186,11 @@ function getImage(variant: CTAVariant): ReactNode {
 
 const StyledDonateAppealTitleContainer = styled(Localizer)`
   text-align: center;
+  margin-inline: var(--margins-xs);
 `;
 
 function DonateAppealTitle() {
-  return <StyledDonateAppealTitleContainer token="donateSessionAppealTitle" />;
+  return <StyledDonateAppealTitleContainer token="finalAppeal" />;
 }
 
 function getTitle(variant: CTAVariantExcludingProCTAs) {
@@ -221,7 +222,7 @@ function getDescription(variant: CTAVariantExcludingProCTAs) {
       return <Localizer token="donateSessionDescription" />;
 
     case CTAVariant.DONATE_APPEAL:
-      return <Localizer token="donateSessionAppealDescription" />;
+      return <Localizer token="finalAppealDescription" />;
 
     default:
       assertUnreachable(variant, 'CtaTitle');
@@ -311,7 +312,7 @@ function Buttons({
           }}
           dataTestId="cta-confirm-button"
         >
-          <Localizer token="donateSessionAppealReadMore" />
+          <Localizer token="readMoreCapital" />
         </SessionButtonShiny>
       );
     }
